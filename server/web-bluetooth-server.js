@@ -118,7 +118,7 @@ function handleBLEMessage(event) {
   const value = event.target.value;
   const decoder = new TextDecoder('utf-8');
   const message = decoder.decode(value);
-  console.log(message);
+  // console.log(message);
 
  
   // Display the message on the HTML page

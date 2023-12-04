@@ -137,16 +137,40 @@ for(var i = 0; i<gamePoints;i++){
 	blobs_position_y[i] = Math.floor(Math.random() * 20);
 }
 
-var x_val = 20, y_val = -20, z_val = -5;
+var x_val = 0, y_val = 0, z_val = 0;
+var X_val = 0, Y_val = 0, Z_val = 0;
+
+const Buttons = document.getElementById("Button");
+Buttons.onclick = function StartAnimation()
+{
+	const outputString = document.getElementById("output").innerHTML;
+	var vals = outputString.split(",")
+	// console.log(parseFloat(vals[0]));
+	X_val = parseFloat(vals[0] || 0); 
+	Y_val = parseFloat(vals[1] || 0); 
+	Z_val = parseFloat(vals[2] || 0);
+renderer.setAnimationLoop( animationLoop );
+	animate();
+}
+
 
 function animationLoop( t )
 {
 		// process keys
 		// cat.rotation.y = Math.PI;
 
-		catSpeed = 1 * x_val /100;
+		const outputString = document.getElementById("output").innerHTML;
+		var vals = outputString.split(",")
+		// console.log(parseFloat(vals[0]));
+		x_val = parseFloat(vals[0] || 0); 
+		y_val = parseFloat(vals[1] || 0); 
+		z_val = parseFloat(vals[2] || 0);
+
+
+
+		catSpeed = 1/2 * (Y_val-y_val);
 		catDir.subVectors( cat.position, camera.position ).y = 0;
-		catDir.applyAxisAngle( AXIS_Y, 1 * y_val /100 );
+		catDir.applyAxisAngle( AXIS_Y, 1/2 * (X_val-x_val) );
 		catDir.normalize();
 		
 		// if( keyHash.ArrowUp || keyHash.ArrowLeft || keyHash.ArrowRight || keyHash.ArrowDown )
@@ -180,7 +204,7 @@ function animationLoop( t )
 			blobs[i].position.z = blobs_position_y[i];
 			if(Math.abs(cat.position.x-blobs[i].position.x)<blobRad && Math.abs(cat.position.z-blobs[i].position.z)<blobRad){
 				blobs[i].position.y = 3;
-				console.log(cat.position.x-blobs[i].position.x);
+				// console.log(cat.position.x-blobs[i].position.x);
 			}
 		}
 	
@@ -198,12 +222,6 @@ function animationLoop( t )
 }
 
 
-const Buttons = document.getElementById("Button");
-Buttons.onclick = function StartAnimation()
-{
-	renderer.setAnimationLoop( animationLoop );
-	animate();
-}
     
 
 

@@ -2,16 +2,35 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
+		<meta
+			name="viewport"
+			content="width=device-width"
+		/>
 		<title>My first three.js app</title>
 		<style>
 			body { margin: 0; }
 		</style>
+
 	</head>
 	<body>
 		<script type="module" src="/main.js"></script>
 		<script src="../scripts/GLTFLoader.js"></script>
+		<script src="./web-bluetooth-server.js"></script>
+
+		<button onclick="connect()">Connect</button>
+
 		<button id="Button">
 			Start
 		</button>
+		
+
+		<div id="output"></div>
+
+		<script>
+			function appendToOutput(message) {
+				const outputDiv = document.getElementById('output');
+				outputDiv.innerHTML = `${message}`;
+			}
+		</script>
 	</body>
 </html>
