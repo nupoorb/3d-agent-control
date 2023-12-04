@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <script src="./ble.js"></script>
+
+    <title>BLE</title>
+  </head>
+
+  <body>
+    <button onclick="connect()">Connect</button>
+    <div id="output"></div>
+
+    <script>
+      function appendToOutput(message) {
+        const outputDiv = document.getElementById('output');
+        outputDiv.innerHTML = `<p>${message}</p>`;
+      }
+    </script>
+  </body>
+</html>
+
