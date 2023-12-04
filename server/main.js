@@ -2,7 +2,11 @@
 
 import * as THREE from "three";
 
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import Stats from 'three/examples/jsm/libs/stats.module'
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+
 
 // general setup, boring, skip to the next comment
 
@@ -11,8 +15,8 @@ console.clear( );
 var scene = new THREE.Scene();
     scene.background = new THREE.Color( 'gainsboro' );
 
-var camera = new THREE.PerspectiveCamera( 30, innerWidth/innerHeight );
-    camera.position.set( 0, 100, 100 );
+var camera = new THREE.PerspectiveCamera( 45, innerWidth/innerHeight );
+    camera.position.set( 0, 130, 90 );
 
 var renderer = new THREE.WebGLRenderer( {antialias: true} );
     renderer.setSize( innerWidth, innerHeight );
@@ -39,7 +43,7 @@ window.addEventListener( "resize", (event) => {
 
 // a procedurally generated texture grid
 
-const grid = new THREE.GridHelper( 200, 100, 0x000000, 0x000000 );
+const grid = new THREE.GridHelper( 200, 200, 0x000000, 0x000000 );
 				grid.material.opacity = 0.2;
 				grid.material.transparent = true;
 				scene.add( grid );
@@ -50,8 +54,8 @@ const grid = new THREE.GridHelper( 200, 100, 0x000000, 0x000000 );
 // next comment
 
 
-const CAMERA_DISTANCE = 10,
-			CAMERA_ALTITUDE = 3,
+const CAMERA_DISTANCE = 12,
+			CAMERA_ALTITUDE = 2.5,
 			AXIS_Y = new THREE.Vector3( 0, 1, 0 );
 
 
@@ -94,58 +98,91 @@ var catSpeed = 0,
 			new THREE.MeshNormalMaterial()
 	);
 
+var blobs = [];
+
+var gamePoints = 5;
+var blobRad = 0.4
+
+for(var i = 0; i<gamePoints; i++){
+	blobs[i] = new THREE.Mesh(
+		new THREE.SphereGeometry(blobRad),
+		new THREE.MeshBasicMaterial({ color: 0xff0000 })
+	)
+}
+		var mixer;
 		const loader = new GLTFLoader();
-		loader.load( 'models/Soldier.glb', function ( gltf ) {
-			// gltf.scene.scale.set(0.01, 0.01, 0.01);
+		// const loader = new OBJLoader();
+		loader.load( 'models/car1.glb', function ( gltf ) {
+			//  gltf.scene.scale.set(0.2, 0.2, 0.2);
+			
 			cat = gltf.scene;
 			scene.add( cat );
 
-			const animations = gltf.animations;
-			mixer = new THREE.AnimationMixer( model );
-			walkAction = mixer.clipAction( animations[ 3 ] );
-			walkAction.play();
-
-			activateAllActions();
-
-			animate();
+			mixer = new THREE.AnimationMixer( cat );
+			var action = mixer.clipAction( gltf.animations[ 1 ] );
+			action.play();
 
 
 		} );
 
 
-scene.add(  tail1, tail2, tail3 );
+// scene.add(tail1, tail2, tail3);
 
+blobs.forEach((data)=>scene.add(data));
 
+var blobs_position_x= [];
+var blobs_position_y= [];
+for(var i = 0; i<gamePoints;i++){
+	blobs_position_x[i] = Math.floor(Math.random() * 20);
+	blobs_position_y[i] = Math.floor(Math.random() * 20);
+}
 
+var x_val = 20, y_val = -20, z_val = -5;
 
 function animationLoop( t )
 {
 		// process keys
+		// cat.rotation.y = Math.PI;
+
+		catSpeed = 1 * x_val /100;
+		catDir.subVectors( cat.position, camera.position ).y = 0;
+		catDir.applyAxisAngle( AXIS_Y, 1 * y_val /100 );
+		catDir.normalize();
 		
-		if( keyHash.ArrowUp || keyHash.ArrowLeft || keyHash.ArrowRight || keyHash.ArrowDown )
-		{
-				catSpeed = 1;
-				catDir.subVectors( cat.position, camera.position ).y = 0;
+		// if( keyHash.ArrowUp || keyHash.ArrowLeft || keyHash.ArrowRight || keyHash.ArrowDown )
+		// {
+		// 		catSpeed = 1;
+				
+		// 		if( keyHash.ArrowDown )	
+		// 		else
+		// 		if( keyHash.ArrowLeft )	catDir.applyAxisAngle( AXIS_Y, 1.4 );
+		// 		else
+		// 		if( keyHash.ArrowRight ) catDir.applyAxisAngle( AXIS_Y, -1.4 );
 			
-				if( keyHash.ArrowDown )	catDir.applyAxisAngle( AXIS_Y, Math.PI );
-				else
-				if( keyHash.ArrowLeft )	catDir.applyAxisAngle( AXIS_Y, 1.4 );
-				else
-				if( keyHash.ArrowRight ) catDir.applyAxisAngle( AXIS_Y, -1.4 );
-			
-				catDir.normalize( );
-		}
-		else
-				catSpeed *= 0.99;
+		// 		catDir.normalize( );
+		// }
+		// else
+		// 		catSpeed *= 0.99;
 
 	
 		cat.position.addScaledVector( catDir, catSpeed*0.1 );
-		cat.rotation.y = lerpAngle( cat.rotation.y, Math.atan2( catDir.x, catDir.z ) + Math.PI, 0.06 );
+		cat.rotation.y = lerpAngle( cat.rotation.y, Math.atan2( catDir.x, catDir.z ), 0.06 );
 
+		
 		tail1.position.lerp( cat.position, 0.05 );	
-		tail2.position.lerp( tail1.position, 0.01 );	
-		tail3.position.lerp( tail2.position, 0.01 );	
-		camera.position.lerp( tail3.position, 0.01 );
+		tail2.position.lerp( tail1.position, 0.03 );	
+		tail3.position.lerp( tail2.position, 0.03 );	
+		camera.position.lerp( tail3.position, 0.03 );
+
+		for(var i = 0; i<gamePoints;i++){
+			
+			blobs[i].position.x = blobs_position_x[i];
+			blobs[i].position.z = blobs_position_y[i];
+			if(Math.abs(cat.position.x-blobs[i].position.x)<blobRad && Math.abs(cat.position.z-blobs[i].position.z)<blobRad){
+				blobs[i].position.y = 3;
+				console.log(cat.position.x-blobs[i].position.x);
+			}
+		}
 	
 		// set camera position
 		camera.position.sub( cat.position );
@@ -155,12 +192,34 @@ function animationLoop( t )
 		camera.position.add( cat.position );
 	
 		// set camera orientation
-	  camera.lookAt( cat.position );
+	  	camera.lookAt( cat.position );
 
     renderer.render( scene, camera );
 }
 
-renderer.setAnimationLoop( animationLoop );
+
+const Buttons = document.getElementById("Button");
+Buttons.onclick = function StartAnimation()
+{
+	renderer.setAnimationLoop( animationLoop );
+	animate();
+}
+    
+
+
+const clock = new THREE.Clock()
+
+function animate() {
+    requestAnimationFrame(animate)
+
+    // controls.update()
+
+    // if (modelReady) mixer.update(clock.getDelta())
+
+    // render()
+
+    // stats.update()
+}
 
 
 
