@@ -133,13 +133,13 @@ blobs.forEach((data)=>scene.add(data));
 var blobs_position_x= [];
 var blobs_position_y= [];
 for(var i = 0; i<gamePoints;i++){
-	blobs_position_x[i] = Math.floor(Math.random() * 20);
-	blobs_position_y[i] = Math.floor(Math.random() * 20);
+	blobs_position_x[i] = Math.floor((0.5-Math.random()) * 50);
+	blobs_position_y[i] = Math.floor((0.5-Math.random()) * 50);
 }
 
 var x_val = 0, y_val = 0, z_val = 0;
 var X_val = 0, Y_val = 0, Z_val = 0;
-
+var points;
 const Buttons = document.getElementById("Button");
 Buttons.onclick = function StartAnimation()
 {
@@ -151,6 +151,15 @@ Buttons.onclick = function StartAnimation()
 	Z_val = parseFloat(vals[2] || 0);
 renderer.setAnimationLoop( animationLoop );
 	animate();
+}
+
+const startButton = document.getElementById("reset");
+startButton.onclick = function resetPoints()
+{
+	points = 0;
+	for(var i = 0; i<gamePoints;i++){
+		blobs[i].position.y = 0;
+	}
 }
 
 
@@ -168,9 +177,9 @@ function animationLoop( t )
 
 
 
-		catSpeed = 1/2 * (Y_val-y_val);
+		catSpeed = 0.99 * (Y_val-y_val);
 		catDir.subVectors( cat.position, camera.position ).y = 0;
-		catDir.applyAxisAngle( AXIS_Y, 1/2 * (X_val-x_val) );
+		catDir.applyAxisAngle( AXIS_Y, -1 * (X_val-x_val) );
 		catDir.normalize();
 		
 		// if( keyHash.ArrowUp || keyHash.ArrowLeft || keyHash.ArrowRight || keyHash.ArrowDown )
@@ -198,15 +207,21 @@ function animationLoop( t )
 		tail3.position.lerp( tail2.position, 0.03 );	
 		camera.position.lerp( tail3.position, 0.03 );
 
+		let count = 0;
 		for(var i = 0; i<gamePoints;i++){
 			
 			blobs[i].position.x = blobs_position_x[i];
 			blobs[i].position.z = blobs_position_y[i];
-			if(Math.abs(cat.position.x-blobs[i].position.x)<blobRad && Math.abs(cat.position.z-blobs[i].position.z)<blobRad){
+			if(Math.abs(cat.position.x-blobs[i].position.x)<blobRad+0.2 && Math.abs(cat.position.z-blobs[i].position.z)<blobRad+0.2){
 				blobs[i].position.y = 3;
 				// console.log(cat.position.x-blobs[i].position.x);
 			}
+			if(blobs[i].position.y == 3){
+				count += 1;
+			}
 		}
+		points = count;
+		updatePoints(points);
 	
 		// set camera position
 		camera.position.sub( cat.position );
@@ -221,6 +236,17 @@ function animationLoop( t )
     renderer.render( scene, camera );
 }
 
+
+function updatePoints(points) {
+	let pointsMessage;
+	if(points==gamePoints){
+		pointsMessage = "You win!!!";
+	}
+	else{
+		pointsMessage = "Points : " + points;
+	}
+	document.getElementById("points").innerHTML = pointsMessage;
+  };
 
     
 

@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+
 		<meta charset="utf-8">
+
+		<link rel="stylesheet" type="text/css" href="styles.css" /> 
+    
+
 		<meta
 			name="viewport"
 			content="width=device-width"
 		/>
-		<title>My first three.js app</title>
+		<title>Game Time</title>
 		<style>
 			body { margin: 0; }
 		</style>
@@ -17,11 +22,35 @@
 		<script src="../scripts/GLTFLoader.js"></script>
 		<script src="./web-bluetooth-server.js"></script>
 
-		<button onclick="connect()">Connect</button>
+		<div class="center">
+			<button class="button-85" role="button" onclick="connect()">Connect</button>
+			<button id="Button" class="button-85">
+				Calibrate
+			</button>
+			<button id="reset" class="button-85">
+				Reset
+			</button>
+			<div id="points" class="button-54"> 
+				Ready?
+			</div>
+			
+			<br>
+			<p style="padding: 10px;">
+				<h2>NFS Unwanted</h2>
+				<br>
+			<h3>How to play?</h3>
+			<br>
+			Connect Device  &ensp; &#9733; &ensp;
+			Calibrate when ready   &ensp; &#9733; &ensp;
+			Have fun!
+			</ol>
+			
+			</p>
+			<aside></aside>
+		</div>
+		
+		
 
-		<button id="Button">
-			Start
-		</button>
 		
 
 		<div id="output"></div>
