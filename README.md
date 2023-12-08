@@ -2,9 +2,10 @@
 
 
 <h3>Requirements</h3>
-three.js - https://threejs.org/docs/#manual/en/introduction/Installation
-Device with IMU
-
+<ol>
+  <li>three.js - https://threejs.org/docs/#manual/en/introduction/Installation</li>
+<li>Device with IMU</li>
+</ol>
 <h3>Results</h3>
 <img width="923" alt="ss" src="https://github.com/nupoorb/3d-agent-control/assets/35562572/51f7c5fd-a6bd-46bd-9420-113feee37fa5">
 
