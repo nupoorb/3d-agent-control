@@ -29,7 +29,7 @@
 <ol>
   <li>Clone this repo into the server</li>
   <li>Locate <code>index.html</code> and run using <code>npx vite</code></li>
-  <li>Using browser access port 5173 of locahost</li>
+  <li>Using browser access port 5173 of localhost</li>
 </ol>
 <h3>Results</h3>
 <img width="923" alt="ss" src="https://github.com/nupoorb/3d-agent-control/assets/35562572/51f7c5fd-a6bd-46bd-9420-113feee37fa5">
