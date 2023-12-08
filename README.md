@@ -21,14 +21,14 @@
 <h3>Client</h3>
 <ol>
   <li>Connect Arduino to computer and select ESP32 dev module and arduino system board.</li>
-  <li>Copy "web-bluetooth-esp32.ino" from <code>client/test1</code> folder to your IDE and upload to the arduino board</li>
+  <li>Copy <code>web-bluetooth-esp32.ino</code> from <code>client/test1</code> folder to your IDE and upload to the arduino board</li>
   <li>Upon successful upload, check if seriel monitor is publishing IMU values</li>
 </ol>
 
 <h3>Sever</h3>
 <ol>
   <li>Clone this repo into the server</li>
-  <li>Locate index.html and run using <code>npx vite</code></li>
+  <li>Locate <code>index.html</code> and run using <code>npx vite</code></li>
   <li>Using browser access port 5173 of locahost</li>
 </ol>
 <h3>Results</h3>
